@@ -23,7 +23,6 @@
     },
     "require-dev": {
         "orchestra/testbench": "^8.5",
-        "laravel/laravel": "^10.1",
         "laravel/pint": "^1.10",
         "phpstan/phpstan": "^1.10"
     },
