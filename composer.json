@@ -1,0 +1,35 @@
+{
+    "name": "studocu/asserts-schema-for-laravel",
+    "description": "An OpenAPI test integration for your Laravel test suite.",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Studocu\\AssertsSchemaForLaravel\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Studocu\\AssertsSchemaForLaravel\\Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "php": "8.*",
+        "league/openapi-psr7-validator": "^0.21.0",
+        "symfony/psr-http-message-bridge": "^2.2",
+        "illuminate/testing": "^8.0|^9.0|^10.0",
+        "illuminate/support": "^8.0|^9.0|^10.0",
+        "nyholm/psr7": "^1.7"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^8.5",
+        "laravel/laravel": "^10.1",
+        "laravel/pint": "^1.10",
+        "phpstan/phpstan": "^1.10"
+    },
+    "scripts": {
+        "test": "phpunit",
+        "lint": "pint",
+        "phpstan": "phpstan analyse"
+    }
+}

@@ -1,0 +1,74 @@
+openapi: 3.0.0
+info:
+  title: Test REST API
+  version: 0.1.0
+  contact: { }
+servers:
+  - url: https://www.localhost.com/api/v2
+paths:
+  /test:
+    get:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+components:
+  schemas:
+    Response:
+      type: object
+      properties:
+        message:
+          type: string
+        data:
+          $ref: '#/components/schemas/Data'
+        meta:
+          $ref: '#/components/schemas/Meta'
+      required:
+        - message
+        - data
+    Data:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        optional:
+          type: boolean
+      required:
+        - id
+        - name
+    Meta:
+      type: object
+      properties:
+        total:
+          type: integer
+          format: int64
+        page:
+          type: integer
+          format: int64
+        perPage:
+          type: integer
+          format: int64
+      required:
+        - total
+        - page
+        - perPage
+  parameters:
+    IdPathParameter:
+      name: id
+      in: path
+      schema:
+        type: integer
+        format: int64
+      required: true
+    NameQueryParameter:
+      name: name
+      in: query
+      schema:
+        type: string
+      required: false

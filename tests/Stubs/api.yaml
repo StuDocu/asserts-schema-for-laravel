@@ -1,0 +1,122 @@
+openapi: 3.0.0
+info:
+  title: Test REST API
+  version: 0.1.0
+  contact: { }
+servers:
+  - url: https://www.localhost.com/api/v1
+paths:
+  /test:
+    get:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Test'
+  /my-url/{id}:
+    get:
+      parameters:
+        - $ref: '#/components/parameters/IdPathParameter'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ok'
+    post:
+      parameters:
+        - $ref: '#/components/parameters/IdPathParameter'
+      responses:
+        '201':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                allOf:
+                  - $ref: '#/components/schemas/Message'
+                  - type: object
+                    properties:
+                      extra:
+                        type: boolean
+                    required:
+                      - extra
+  /query-params:
+    get:
+      parameters:
+        - name: id
+          in: query
+          schema:
+            type: integer
+            format: int64
+          required: true
+        - $ref: '#/components/parameters/NameQueryParameter'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Test'
+  /route-params:
+    get:
+      parameters:
+        - name: id
+          in: query
+          schema:
+            type: integer
+            format: int64
+          required: true
+        - $ref: '#/components/parameters/NameQueryParameter'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Test'
+components:
+  schemas:
+    Test:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+    Message:
+      type: object
+      properties:
+        message:
+          type: string
+      required:
+        - message
+    Ok:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/Message'
+        - type: object
+          properties:
+            id:
+              type: integer
+              format: int64
+          required:
+            - id
+  parameters:
+    IdPathParameter:
+      name: id
+      in: path
+      schema:
+        type: integer
+        format: int64
+      required: true
+    NameQueryParameter:
+      name: name
+      in: query
+      schema:
+        type: string
+      required: false
