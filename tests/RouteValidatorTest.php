@@ -34,11 +34,10 @@ class RouteValidatorTest extends \Orchestra\Testbench\TestCase
     public function testShouldFindPostRoutesToo(): void
     {
         Route::prefix('api/v1')->group(function () {
-            Route::get('/my-url/{id}', fn (int $id) => ['message' => 'ok', 'id' => $id]);
             Route::post('/my-url/{id}', fn (int $id) => response(['message' => 'ok', 'extra' => true], 201));
         });
 
-        $response = $this->postJson('/api/v1/my-url/1');
+        $response = $this->postJson('/api/v1/my-url/1', []);
 
         $response->assertCreated();
     }
@@ -62,6 +61,9 @@ class RouteValidatorTest extends \Orchestra\Testbench\TestCase
         Route::prefix('api/v1')->group(function () {
             Route::get('/my-url/{id}', fn (int $id) => ['message' => 'ok', 'id' => $id]);
             Route::post('/my-url/{id}', fn (int $id) => ['message' => 'ok', 'id' => $id]);
+
+            // The next route exists here but not in the schema:
+            Route::put('/my-url/{id}', fn (int $id) => ['message' => 'ok', 'id' => $id]);
         });
 
         $this->expectException(OpenAPIRouteMismatchException::class);
