@@ -52,7 +52,7 @@ trait AssertsSchema
             apiPrefix: $this->apiPrefix,
             method: $method,
             uri: $uri,
-            routeUri: $this->getRouteUri($uri),
+            routeUri: $this->getRouteUri($uri, $method),
         );
 
         $apiValidator->validateRequest(
@@ -78,10 +78,10 @@ trait AssertsSchema
      * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
-    private function getRouteUri(string $uri): string
+    private function getRouteUri(string $uri, string $method): string
     {
         return $this->app->make('router')->getRoutes()->match(
-            $this->app->make('request')->create($uri)
+            $this->app->make('request')->create($uri, $method)
         )->uri();
     }
 }
