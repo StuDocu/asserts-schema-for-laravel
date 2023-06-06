@@ -41,7 +41,7 @@ trait AssertsSchema
      */
     public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
     {
-        if (!$this->shouldValidateSchema) {
+        if (! $this->shouldValidateSchema) {
             $this->shouldValidateSchema = true;
 
             return parent::call($method, $uri, $parameters, $cookies, $files, $server, $content);
