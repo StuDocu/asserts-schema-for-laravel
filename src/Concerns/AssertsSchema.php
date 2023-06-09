@@ -65,13 +65,18 @@ trait AssertsSchema
 
         $response = parent::call($method, $uri, $parameters, $cookies, $files, $server, $content);
 
-        if ($response->getStatusCode() >= 500) {
+        if ($this->shouldSkipResponseValidation($response)) {
             return $response;
         }
 
         $apiValidator->validateResponse($response->baseResponse);
 
         return $response;
+    }
+
+    private function shouldSkipResponseValidation(TestResponse $response): bool
+    {
+        return $response->getStatusCode() >= 500 || $response->getStatusCode() === 204;
     }
 
     /**
