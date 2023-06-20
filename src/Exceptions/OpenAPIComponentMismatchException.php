@@ -3,7 +3,6 @@
 namespace Studocu\AssertsSchemaForLaravel\Exceptions;
 
 use Exception;
-use League\OpenAPIValidation\PSR7\Exception\Validation\InvalidBody;
 use League\OpenAPIValidation\Schema\Exception\KeywordMismatch;
 use League\OpenAPIValidation\Schema\Exception\SchemaMismatch;
 
@@ -19,7 +18,7 @@ class OpenAPIComponentMismatchException extends Exception
             $message .= "Error in: \"$crumb\". ";
         }
 
-        $message .= ' for keyword: ' . $exception->keyword() . '. ' . $exception->getPrevious()?->getMessage();
+        $message .= ' for keyword: '.$exception->keyword().'. '.$exception->getPrevious()?->getMessage();
 
         return new self($message, $exception->getCode(), $exception);
     }

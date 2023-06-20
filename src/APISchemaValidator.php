@@ -2,9 +2,6 @@
 
 namespace Studocu\AssertsSchemaForLaravel;
 
-use cebe\openapi\exceptions\IOException;
-use cebe\openapi\exceptions\TypeErrorException;
-use cebe\openapi\exceptions\UnresolvableReferenceException;
 use cebe\openapi\Reader;
 use cebe\openapi\spec\Schema;
 use Illuminate\Support\Str;
@@ -17,7 +14,6 @@ use League\OpenAPIValidation\PSR7\Exception\Validation\InvalidQueryArgs;
 use League\OpenAPIValidation\PSR7\OperationAddress;
 use League\OpenAPIValidation\PSR7\ValidatorBuilder;
 use League\OpenAPIValidation\Schema\Exception\KeywordMismatch;
-use League\OpenAPIValidation\Schema\Exception\SchemaMismatch;
 use League\OpenAPIValidation\Schema\SchemaValidator;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Psr\Http\Message\ResponseInterface;

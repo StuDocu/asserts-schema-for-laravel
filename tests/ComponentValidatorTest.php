@@ -33,8 +33,8 @@ class ComponentValidatorTest extends TestCase
 
     public function testItCanValidateDataAgainstComponent(): void
     {
-        $this->expectException(OpenAPIComponentMismatchException::class);
+        $this->validateComponent('Test', ['id' => 123]);
 
-        $this->validateComponent('Test', 123);
+        $this->addToAssertionCount(1);
     }
 }
