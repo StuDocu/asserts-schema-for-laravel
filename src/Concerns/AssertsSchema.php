@@ -74,6 +74,21 @@ trait AssertsSchema
         return $response;
     }
 
+    public function validateComponent(string $componentName, mixed $data): bool
+    {
+        $apiValidator = new APISchemaValidator(
+            yamlFile: $this->yamlPath,
+            apiPrefix: $this->apiPrefix,
+            method: 'GET',
+            uri: '',
+            routeUri: '',
+        );
+
+        $apiValidator->validateComponent($componentName, $data);
+
+        return true;
+    }
+
     private function shouldSkipResponseValidation(TestResponse $response): bool
     {
         return $response->getStatusCode() >= 500 || $response->getStatusCode() === 204;
