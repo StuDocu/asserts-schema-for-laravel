@@ -13,5 +13,7 @@
   <php>
     <ini name="display_errors" value="On"/>
     <ini name="error_reporting" value="E_ALL"/>
+
+    <env name="APP_KEY" value="base64:KWP2ixG5dYZ1BnuF3EGZWaYXyWLa+7coRuIUNkG6bv8="/>
   </php>
 </phpunit>

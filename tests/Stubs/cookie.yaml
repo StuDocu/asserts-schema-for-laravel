@@ -1,0 +1,59 @@
+openapi: 3.0.0
+info:
+  title: Test REST API
+  version: 0.1.0
+  contact: { }
+servers:
+  - url: https://www.localhost.com/api/v1
+paths:
+  /send-cookie:
+    get:
+      parameters:
+        - in: cookie
+          name: my_foo_cookie
+          schema:
+            type: string
+          required: true
+          example: <foo related topics>
+          description: My Foo Cookie.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Test'
+  /set-cookie:
+    get:
+      responses:
+        '200':
+          $ref: '#/components/responses/SetCookieResponse'
+components:
+  responses:
+    SetCookieResponse:
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              test:
+                type: string
+            required:
+              - test
+      headers:
+        Set-Cookie:
+          description: The My Bar Cookie will be set
+          schema:
+            $ref: '#/components/schemas/MyBarCookie'
+  schemas:
+    MyBarCookie:
+      type: string
+      example: my_bar_cookie=<token>; Path=/; HttpOnly
+    Test:
+      type: object
+      properties:
+        test:
+          type: string
+      required:
+        - test
