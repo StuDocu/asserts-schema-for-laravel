@@ -91,7 +91,7 @@ trait AssertsSchema
 
     private function shouldSkipResponseValidation(TestResponse $response): bool
     {
-        return $response->getStatusCode() >= 500 || $response->getStatusCode() === 204;
+        return $response->getStatusCode() >= 500;
     }
 
     /**

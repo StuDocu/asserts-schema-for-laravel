@@ -3,6 +3,7 @@
 namespace Studocu\AssertsSchemaForLaravel\Exceptions;
 
 use Exception;
+use League\OpenAPIValidation\PSR7\Exception\NoResponseCode;
 use League\OpenAPIValidation\PSR7\Exception\Validation\InvalidBody;
 use League\OpenAPIValidation\Schema\Exception\SchemaMismatch;
 
@@ -39,5 +40,12 @@ class OpenAPIResponseMismatchException extends Exception
         }
 
         return implode('.', $chain);
+    }
+
+    public static function fromNoResponseCode(NoResponseCode $exception): self
+    {
+        $method = strtoupper($exception->method());
+
+        return new self("[Response Schema Mismatch] Response code {$exception->responseCode()} for [{$method}] {$exception->path()} was not found.", $exception->getCode(), $exception);
     }
 }

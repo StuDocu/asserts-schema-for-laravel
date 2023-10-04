@@ -87,4 +87,25 @@ class ResponseValidatorTest extends \Orchestra\Testbench\TestCase
             'exception' => '/Error in: "meta\.perPage"\.(.)*Required property \'perPage\' must be present/',
         ]];
     }
+
+    public function testShouldPassForNoContentResponse(): void
+    {
+        Route::prefix('api/v2')->group(function () {
+            Route::post('test', fn () => response()->noContent());
+        });
+
+        $this->postJson('/api/v2/test')->assertNoContent();
+    }
+
+    public function testShouldNotPassForUndocumentedNoContentResponse(): void
+    {
+        $this->expectException(OpenAPIResponseMismatchException::class);
+        $this->expectExceptionMessage('[Response Schema Mismatch] Response code 204 for [POST] /test-missing-no-content was not found.');
+
+        Route::prefix('api/v2')->group(function () {
+            Route::post('test-missing-no-content', fn () => response()->noContent());
+        });
+
+        $this->postJson('/api/v2/test-missing-no-content')->assertNoContent();
+    }
 }

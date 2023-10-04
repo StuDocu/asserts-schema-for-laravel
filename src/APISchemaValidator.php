@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use League\OpenAPIValidation\PSR7\Exception\MultipleOperationsMismatchForRequest;
 use League\OpenAPIValidation\PSR7\Exception\NoOperation;
 use League\OpenAPIValidation\PSR7\Exception\NoPath;
+use League\OpenAPIValidation\PSR7\Exception\NoResponseCode;
 use League\OpenAPIValidation\PSR7\Exception\Validation\InvalidBody;
 use League\OpenAPIValidation\PSR7\Exception\Validation\InvalidPath;
 use League\OpenAPIValidation\PSR7\Exception\Validation\InvalidQueryArgs;
@@ -98,6 +99,8 @@ class APISchemaValidator
             $responseValidator->validate($address, $psrResponse);
         } catch (InvalidBody $exception) {
             throw OpenAPIResponseMismatchException::fromInvalidBody($exception);
+        } catch (NoResponseCode $exception) {
+            throw OpenAPIResponseMismatchException::fromNoResponseCode($exception);
         }
     }
 
