@@ -29,9 +29,7 @@ class ExceptionExpectationTest extends TestCase
         array $call,
         int $status,
     ): void {
-        foreach ($exceptions as $exceptionMessage) {
-            $this->expectsSchemaExceptionMessage($exceptionMessage);
-        }
+        $this->expectsSchemaExceptionMessage($exceptions);
 
         $prepare();
 

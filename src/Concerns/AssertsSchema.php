@@ -2,6 +2,7 @@
 
 namespace Studocu\AssertsSchemaForLaravel\Concerns;
 
+use Illuminate\Support\Arr;
 use Illuminate\Testing\TestResponse;
 use Studocu\AssertsSchemaForLaravel\APISchemaValidator;
 use Studocu\AssertsSchemaForLaravel\Support\ExceptionExpectationManager;
@@ -83,9 +84,14 @@ trait AssertsSchema
         return true;
     }
 
-    public function expectsSchemaExceptionMessage(string $message): self
+    /**
+     * @param  string|array<string>|null  $messages
+     */
+    public function expectsSchemaExceptionMessage(string|array|null $messages): self
     {
-        $this->exceptionExpectation->expects($message);
+        foreach (Arr::wrap($messages) as $message) {
+            $this->exceptionExpectation->expects($message);
+        }
 
         return $this;
     }
