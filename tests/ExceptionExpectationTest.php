@@ -59,7 +59,7 @@ class ExceptionExpectationTest extends TestCase
 
     public static function exceptionExpectationDataProvider(): Generator
     {
-        yield 'It should ignore if the method doesn\'t match (for development purposes)' => [
+        yield 'It should ignore if the method doesn\'t match' => [
             'exceptions' => [
                 '[OpenAPI Request Mismatch] Route path [POST: /test] was not found on Schema.',
                 '[OpenAPI Response Mismatch] Route path [POST: /test] was not found on Schema.',
@@ -94,21 +94,6 @@ class ExceptionExpectationTest extends TestCase
                 'headers' => [],
             ],
             'status' => 422,
-        ];
-
-        yield 'Route method mismatch' => [
-            'exceptions' => [
-                '[OpenAPI Request Mismatch] Route path [POST: /test] was not found on Schema.',
-                '[OpenAPI Response Mismatch] Route path [POST: /test] was not found on Schema.',
-            ],
-            'prepare' => fn () => Route::post('/api/v1/test', fn () => response()->json(['id' => 1], 200)),
-            'call' => [
-                'method' => 'POST',
-                'uri' => '/api/v1/test',
-                'data' => [],
-                'headers' => [],
-            ],
-            'status' => 200,
         ];
 
         yield 'None of security schemas match' => [
