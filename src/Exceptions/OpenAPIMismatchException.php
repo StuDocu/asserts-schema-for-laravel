@@ -8,6 +8,7 @@ use League\OpenAPIValidation\PSR7\Exception\NoPath;
 use League\OpenAPIValidation\PSR7\Exception\Validation\InvalidBody;
 use League\OpenAPIValidation\PSR7\Exception\Validation\InvalidPath;
 use League\OpenAPIValidation\PSR7\Exception\Validation\InvalidQueryArgs;
+use League\OpenAPIValidation\PSR7\Exception\Validation\InvalidSecurity;
 use League\OpenAPIValidation\Schema\Exception\KeywordMismatch;
 use League\OpenAPIValidation\Schema\Exception\TypeMismatch;
 use Studocu\AssertsSchemaForLaravel\Support\ExceptionParser;
@@ -92,6 +93,7 @@ class OpenAPIMismatchException extends Exception
             )),
             new ExceptionRenderer(NoOperation::class, fn (NoOperation $exception): string => sprintf('Route path [%s: %s] was not found on Schema.', strtoupper($exception->method()), $exception->path())),
             new ExceptionRenderer(NoPath::class, fn (NoPath $exception): string => sprintf('Route path [%s] was not found on Schema.', $exception->path())),
+            new ExceptionRenderer(InvalidSecurity::class, fn (InvalidSecurity $exception): string => $exception->getMessage()),
         ];
 
         $context = $context ? ' '.ucfirst($context) : '';

@@ -4,6 +4,7 @@ namespace Studocu\AssertsSchemaForLaravel\Tests;
 
 use Generator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
 use Studocu\AssertsSchemaForLaravel\Exceptions\OpenAPIMismatchException;
 
@@ -110,6 +111,20 @@ class ExceptionExpectationTest extends TestCase
                 'headers' => [],
             ],
             'status' => 200,
+        ];
+
+        yield 'None of security schemas match' => [
+            'exceptions' => [
+                '[OpenAPI Request Mismatch] None of security schemas did match for Request [get /auth]',
+            ],
+            'prepare' => fn () => Route::get('/api/v1/auth', fn () => Gate::allowIf(false)),
+            'call' => [
+                'method' => 'GET',
+                'uri' => '/api/v1/auth',
+                'data' => [],
+                'headers' => [],
+            ],
+            'status' => 403,
         ];
     }
 }
