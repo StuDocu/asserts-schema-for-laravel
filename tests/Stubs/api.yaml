@@ -29,8 +29,20 @@ paths:
     post:
       parameters:
         - $ref: '#/components/parameters/IdPathParameter'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                foo:
+                  type: string
+                bar:
+                  type: integer
+              required:
+                - foo
       responses:
-        '201':
+        '200':
           description: OK
           content:
             application/json:
@@ -44,6 +56,20 @@ paths:
                         type: boolean
                     required:
                       - extra
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
   /query-params:
     get:
       parameters:

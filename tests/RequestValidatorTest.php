@@ -5,7 +5,7 @@ namespace Studocu\AssertsSchemaForLaravel\Tests;
 use Generator;
 use Illuminate\Support\Facades\Route;
 use Studocu\AssertsSchemaForLaravel\Concerns\AssertsSchema;
-use Studocu\AssertsSchemaForLaravel\Exceptions\OpenAPIRequestMismatchException;
+use Studocu\AssertsSchemaForLaravel\Exceptions\OpenAPIMismatchException;
 
 class RequestValidatorTest extends \Orchestra\Testbench\TestCase
 {
@@ -55,7 +55,7 @@ class RequestValidatorTest extends \Orchestra\Testbench\TestCase
             Route::get('query-params', fn () => ['message' => 'ok', 'id' => 1]);
         });
 
-        $this->expectException(OpenAPIRequestMismatchException::class);
+        $this->expectException(OpenAPIMismatchException::class);
         // Error: "Missing required argument "id" for Request [get /query-params]"
         $this->expectExceptionMessageMatches($data['exception']);
 

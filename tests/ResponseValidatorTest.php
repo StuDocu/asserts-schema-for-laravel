@@ -5,7 +5,7 @@ namespace Studocu\AssertsSchemaForLaravel\Tests;
 use Generator;
 use Illuminate\Support\Facades\Route;
 use Studocu\AssertsSchemaForLaravel\Concerns\AssertsSchema;
-use Studocu\AssertsSchemaForLaravel\Exceptions\OpenAPIResponseMismatchException;
+use Studocu\AssertsSchemaForLaravel\Exceptions\OpenAPIMismatchException;
 
 class ResponseValidatorTest extends \Orchestra\Testbench\TestCase
 {
@@ -52,7 +52,7 @@ class ResponseValidatorTest extends \Orchestra\Testbench\TestCase
             Route::get('test', fn () => $data['response']);
         });
 
-        $this->expectException(OpenAPIResponseMismatchException::class);
+        $this->expectException(OpenAPIMismatchException::class);
         $this->expectExceptionMessageMatches($data['exception']);
 
         $this->getJson('/api/v2/test')->assertOk();
@@ -65,18 +65,18 @@ class ResponseValidatorTest extends \Orchestra\Testbench\TestCase
     {
         yield [[
             'response' => ['message' => 'string', 'data' => ['id' => 'string', 'name' => 'string', 'optional' => true]],
-            'exception' => '/Error in: "data\.id"\.(.)* expected to be \'integer\', but \'string\' given/',
+            'exception' => '/Error in: "data\.id"\.(.)* expected to be \"integer\", but \"string\" given/',
         ]];
         yield [[
             'response' => ['data' => ['id' => 'string', 'name' => 'string', 'optional' => true]],
-            'exception' => '/Error in: "message"\.(.)*Required property \'message\' must be present in the object/',
+            'exception' => '/Error in: "message"\.(.)*Required property \"message\" must be present in the object/',
         ]];
         yield [[
             'response' => [
                 'message' => 'string',
                 'data' => ['id' => 1, 'name' => 'string', 'optional' => 1],
             ],
-            'exception' => '/Error in: "data\.optional"\.(.)* expected to be \'boolean\', but \'integer\' given/',
+            'exception' => '/Error in: "data\.optional"\.(.)* expected to be \"boolean\", but \"integer\" given/',
         ]];
         yield [[
             'response' => [
@@ -84,7 +84,7 @@ class ResponseValidatorTest extends \Orchestra\Testbench\TestCase
                 'data' => ['id' => 1, 'name' => 'string'],
                 'meta' => ['total' => 1, 'page' => 1],
             ],
-            'exception' => '/Error in: "meta\.perPage"\.(.)*Required property \'perPage\' must be present/',
+            'exception' => '/Error in: "meta\.perPage"\.(.)*Required property \"perPage\" must be present/',
         ]];
     }
 }

@@ -4,25 +4,15 @@ namespace Studocu\AssertsSchemaForLaravel;
 
 use cebe\openapi\Reader;
 use cebe\openapi\spec\Schema;
+use Exception;
 use Illuminate\Support\Str;
-use League\OpenAPIValidation\PSR7\Exception\MultipleOperationsMismatchForRequest;
-use League\OpenAPIValidation\PSR7\Exception\NoOperation;
-use League\OpenAPIValidation\PSR7\Exception\NoPath;
-use League\OpenAPIValidation\PSR7\Exception\Validation\InvalidBody;
-use League\OpenAPIValidation\PSR7\Exception\Validation\InvalidPath;
-use League\OpenAPIValidation\PSR7\Exception\Validation\InvalidQueryArgs;
 use League\OpenAPIValidation\PSR7\OperationAddress;
 use League\OpenAPIValidation\PSR7\ValidatorBuilder;
-use League\OpenAPIValidation\Schema\Exception\KeywordMismatch;
 use League\OpenAPIValidation\Schema\SchemaValidator;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Studocu\AssertsSchemaForLaravel\Exceptions\OpenAPIComponentMismatchException;
-use Studocu\AssertsSchemaForLaravel\Exceptions\OpenAPIComponentNotFoundException;
-use Studocu\AssertsSchemaForLaravel\Exceptions\OpenAPIRequestMismatchException;
-use Studocu\AssertsSchemaForLaravel\Exceptions\OpenAPIResponseMismatchException;
-use Studocu\AssertsSchemaForLaravel\Exceptions\OpenAPIRouteMismatchException;
+use Studocu\AssertsSchemaForLaravel\Exceptions\OpenAPIMismatchException;
 use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -65,20 +55,8 @@ class APISchemaValidator
 
         try {
             $routedRequestValidator->validate($address, $request);
-        }
-        // Route Exceptions
-        catch (MultipleOperationsMismatchForRequest $e) {
-            throw OpenAPIRouteMismatchException::fromMultipleOperationsMismatchForRequest($e);
-        } catch (NoOperation $e) {
-            throw OpenAPIRouteMismatchException::fromNoOperation($e);
-        } catch (NoPath $e) {
-            throw OpenAPIRouteMismatchException::fromNoPath($e);
-        } catch (InvalidPath $e) {
-            throw OpenAPIRouteMismatchException::fromInvalidPath($e);
-        }
-        // Request Exceptions
-        catch (InvalidQueryArgs $e) {
-            throw OpenAPIRequestMismatchException::fromInvalidQueryArgs($e);
+        } catch (Exception $exception) {
+            throw OpenAPIMismatchException::from($exception, 'request');
         }
 
         // Generic Exceptions
@@ -96,25 +74,21 @@ class APISchemaValidator
 
         try {
             $responseValidator->validate($address, $psrResponse);
-        } catch (InvalidBody $exception) {
-            throw OpenAPIResponseMismatchException::fromInvalidBody($exception);
+        } catch (Exception $exception) {
+            throw OpenAPIMismatchException::from($exception, 'response');
         }
     }
 
-    /**
-     * @throws OpenAPIComponentNotFoundException
-     * @throws OpenAPIComponentMismatchException
-     */
     public function validateComponent(string $componentName, mixed $data): void
     {
         $spec = Reader::readFromYamlFile($this->yamlFile);
 
         if ($spec->components?->schemas === null) {
-            throw OpenAPIComponentNotFoundException::fromComponentName($componentName);
+            throw OpenAPIMismatchException::fromComponentName($componentName);
         }
 
         if (! array_key_exists($componentName, $spec->components->schemas)) {
-            throw OpenAPIComponentNotFoundException::fromComponentName($componentName);
+            throw OpenAPIMismatchException::fromComponentName($componentName);
         }
 
         /** @var Schema $component */
@@ -122,8 +96,8 @@ class APISchemaValidator
 
         try {
             (new SchemaValidator())->validate($data, $component);
-        } catch (KeywordMismatch $exception) {
-            throw OpenAPIComponentMismatchException::fromInvalidKeyword($exception);
+        } catch (Exception $exception) {
+            throw OpenAPIMismatchException::from($exception);
         }
     }
 
