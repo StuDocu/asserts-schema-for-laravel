@@ -20,8 +20,8 @@ class ExceptionExpectationManager
     /**
      * @template T
      *
-     * @param  callable<T>: T|null  $function
-     * @param  array<string>  $exceptions
+     * @param  callable(): T  $function
+     * @return T|null
      */
     public function call(callable $function): mixed
     {

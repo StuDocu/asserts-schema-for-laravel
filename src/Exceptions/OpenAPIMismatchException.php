@@ -18,7 +18,7 @@ class OpenAPIMismatchException extends Exception
 {
     public static function from(Exception $exception, string $context = ''): self|Exception
     {
-        /** @var array<array-key, ExceptionRenderer> $exceptionRenderers */
+        /** @var array<array-key, ExceptionRenderer<Exception>> $exceptionRenderers */
         $exceptionRenderers = [
             new ExceptionRenderer(TypeMismatch::class, function (TypeMismatch $exception): string {
                 $crumb = ExceptionParser::getCrumb($exception);
