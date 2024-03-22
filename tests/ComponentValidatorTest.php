@@ -2,8 +2,7 @@
 
 namespace Studocu\AssertsSchemaForLaravel\Tests;
 
-use Studocu\AssertsSchemaForLaravel\Exceptions\OpenAPIComponentMismatchException;
-use Studocu\AssertsSchemaForLaravel\Exceptions\OpenAPIComponentNotFoundException;
+use Studocu\AssertsSchemaForLaravel\Exceptions\OpenAPIMismatchException;
 
 class ComponentValidatorTest extends TestCase
 {
@@ -19,14 +18,14 @@ class ComponentValidatorTest extends TestCase
 
     public function testItWillThrowExceptionIfComponentIsNotFound(): void
     {
-        $this->expectException(OpenAPIComponentNotFoundException::class);
+        $this->expectException(OpenAPIMismatchException::class);
 
         $this->validateComponent('NotFound', []);
     }
 
     public function testItWillThrowExceptionWhenDataDoesNotValidateAgainstComponent(): void
     {
-        $this->expectException(OpenAPIComponentMismatchException::class);
+        $this->expectException(OpenAPIMismatchException::class);
 
         $this->validateComponent('Test', '123');
     }

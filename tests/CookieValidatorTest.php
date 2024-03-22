@@ -5,7 +5,6 @@ namespace Studocu\AssertsSchemaForLaravel\Tests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Route;
 use League\OpenAPIValidation\PSR7\Exception\Validation\InvalidCookies;
-use Studocu\AssertsSchemaForLaravel\Exceptions\OpenAPIResponseMismatchException;
 use Symfony\Component\HttpFoundation\Cookie;
 
 class CookieValidatorTest extends TestCase
@@ -71,7 +70,7 @@ class CookieValidatorTest extends TestCase
         });
 
         // There is no way to do this now, so it will not fail whatsoever.
-        //        $this->expectException(OpenAPIResponseMismatchException::class);
+        //        $this->expectException(OpenAPIMismatchException::class);
 
         $this
             ->getJson('/api/v1/set-cookie')

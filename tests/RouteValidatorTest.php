@@ -4,7 +4,7 @@ namespace Studocu\AssertsSchemaForLaravel\Tests;
 
 use Illuminate\Support\Facades\Route;
 use Studocu\AssertsSchemaForLaravel\Concerns\AssertsSchema;
-use Studocu\AssertsSchemaForLaravel\Exceptions\OpenAPIRouteMismatchException;
+use Studocu\AssertsSchemaForLaravel\Exceptions\OpenAPIMismatchException;
 
 class RouteValidatorTest extends \Orchestra\Testbench\TestCase
 {
@@ -34,12 +34,12 @@ class RouteValidatorTest extends \Orchestra\Testbench\TestCase
     public function testShouldFindPostRoutesToo(): void
     {
         Route::prefix('api/v1')->group(function () {
-            Route::post('/my-url/{id}', fn (int $id) => response(['message' => 'ok', 'extra' => true], 201));
+            Route::post('/my-url/{id}', fn (int $id) => response(['message' => 'ok', 'extra' => true], 200));
         });
 
-        $response = $this->postJson('/api/v1/my-url/1', []);
+        $response = $this->postJson('/api/v1/my-url/1', ['foo' => 'bar']);
 
-        $response->assertCreated();
+        $response->assertSuccessful();
     }
 
     public function testShouldBreakWithUndefinedRoutesOnSchema(): void
@@ -49,9 +49,9 @@ class RouteValidatorTest extends \Orchestra\Testbench\TestCase
             Route::get('/my-url-new/{id}', fn (int $id) => ['message' => 'ok', 'id' => $id]);
         });
 
-        $this->expectException(OpenAPIRouteMismatchException::class);
+        $this->expectException(OpenAPIMismatchException::class);
         // Error: "[Route Schema Mismatch] Route path [/my-url-new/{id}] was not found on Schema"
-        $this->expectExceptionMessageMatches('/\[Route Schema Mismatch\] Route path \[\/my-url-new\/\{id\}\] was not found/');
+        $this->expectExceptionMessageMatches('/\[OpenAPI Request Mismatch\] Route path \[\/my-url-new\/\{id\}\] was not found/');
 
         $response = $this->getJson('/api/v1/my-url-new/1');
     }
@@ -66,7 +66,7 @@ class RouteValidatorTest extends \Orchestra\Testbench\TestCase
             Route::put('/my-url/{id}', fn (int $id) => ['message' => 'ok', 'id' => $id]);
         });
 
-        $this->expectException(OpenAPIRouteMismatchException::class);
+        $this->expectException(OpenAPIMismatchException::class);
         // Error: [Schema Mismatch] Route path [PUT: /my-url/{id}] was not found on Schema
         $this->expectExceptionMessageMatches('/Route path \[PUT\: \/my-url\/\{id\}\] was not found/');
 
@@ -79,7 +79,7 @@ class RouteValidatorTest extends \Orchestra\Testbench\TestCase
             Route::get('/my-url/{id}', fn (int $id) => ['message' => 'ok', 'id' => 1]);
         });
 
-        $this->expectException(OpenAPIRouteMismatchException::class);
+        $this->expectException(OpenAPIMismatchException::class);
         // Error: [Schema Mismatch] Value "asd" for parameter "id" is invalid for Request [get /my-url/{id}]\nValue expected to be 'integer', but 'string' given.
         $this->expectExceptionMessageMatches('/Value "asd" for parameter "id" is invalid for Request \[get \/my-url\/\{id\}\]\nValue expected to be \'integer\', but \'string\' given./');
 

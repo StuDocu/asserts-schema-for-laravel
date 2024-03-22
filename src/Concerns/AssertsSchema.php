@@ -2,8 +2,10 @@
 
 namespace Studocu\AssertsSchemaForLaravel\Concerns;
 
+use Illuminate\Support\Arr;
 use Illuminate\Testing\TestResponse;
 use Studocu\AssertsSchemaForLaravel\APISchemaValidator;
+use Studocu\AssertsSchemaForLaravel\Support\ExceptionExpectationManager;
 
 /**
  * @mixin \Illuminate\Foundation\Testing\Concerns\MakesHttpRequests
@@ -14,17 +16,14 @@ trait AssertsSchema
 
     protected string $apiPrefix;
 
-    protected bool $shouldValidateSchema = true;
+    private ExceptionExpectationManager $exceptionExpectation;
 
     public function configureSchema(string $yamlFullPath, string $apiPrefix): void
     {
         $this->yamlPath = $yamlFullPath;
         $this->apiPrefix = $apiPrefix;
-    }
 
-    public function dontValidateNextCall(): void
-    {
-        $this->shouldValidateSchema = false;
+        $this->exceptionExpectation = new ExceptionExpectationManager();
     }
 
     /**
@@ -41,12 +40,6 @@ trait AssertsSchema
      */
     public function call($method, $uri, $parameters = [], $cookies = [], $files = [], $server = [], $content = null)
     {
-        if (! $this->shouldValidateSchema) {
-            $this->shouldValidateSchema = true;
-
-            return parent::call($method, $uri, $parameters, $cookies, $files, $server, $content);
-        }
-
         $apiValidator = new APISchemaValidator(
             yamlFile: $this->yamlPath,
             apiPrefix: $this->apiPrefix,
@@ -55,13 +48,13 @@ trait AssertsSchema
             routeUri: $this->getRouteUri($uri, $method),
         );
 
-        $apiValidator->validateRequest(
+        $this->exceptionExpectation->call(fn () => $apiValidator->validateRequest(
             parameters: $parameters,
             cookies: $cookies,
             files: array_merge($files, $this->extractFilesFromDataArray($parameters)),
             server: array_replace($this->serverVariables, $server),
             content: $content,
-        );
+        ));
 
         $response = parent::call($method, $uri, $parameters, $cookies, $files, $server, $content);
 
@@ -69,7 +62,9 @@ trait AssertsSchema
             return $response;
         }
 
-        $apiValidator->validateResponse($response->baseResponse);
+        $this->exceptionExpectation->call(fn () => $apiValidator->validateResponse($response->baseResponse));
+
+        $this->exceptionExpectation->assertExceptionsWereMet();
 
         return $response;
     }
@@ -87,6 +82,18 @@ trait AssertsSchema
         $apiValidator->validateComponent($componentName, $data);
 
         return true;
+    }
+
+    /**
+     * @param  string|array<string>|null  $messages
+     */
+    public function expectsSchemaExceptionMessage(string|array|null $messages): self
+    {
+        foreach (Arr::wrap($messages) as $message) {
+            $this->exceptionExpectation->expects($message);
+        }
+
+        return $this;
     }
 
     private function shouldSkipResponseValidation(TestResponse $response): bool
