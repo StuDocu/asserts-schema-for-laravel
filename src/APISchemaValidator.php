@@ -49,7 +49,7 @@ class APISchemaValidator
         $this->apiPrefix = ltrim($apiPrefix, characters: '/');
         $this->routeUri = Str::replaceFirst($this->apiPrefix, '', subject: $routeUri);
 
-        $this->validatorBuilder = static::$validatorBuilderCache[$this->yamlFile] ??= (new ValidatorBuilder())->fromYamlFile($this->yamlFile);
+        $this->validatorBuilder = static::$validatorBuilderCache[$this->yamlFile] ??= (new ValidatorBuilder)->fromYamlFile($this->yamlFile);
     }
 
     /**
@@ -109,7 +109,7 @@ class APISchemaValidator
         $component = $spec->components->schemas[$componentName];
 
         try {
-            (new SchemaValidator())->validate($data, $component);
+            (new SchemaValidator)->validate($data, $component);
         } catch (Exception $exception) {
             throw OpenAPIMismatchException::from($exception);
         }
@@ -126,7 +126,7 @@ class APISchemaValidator
     {
         $request = Request::create($this->uri, $this->method, $parameters, $cookies, $files, $server, $content);
 
-        $psr17Factory = new Psr17Factory();
+        $psr17Factory = new Psr17Factory;
         $psrHttpFactory = new PsrHttpFactory($psr17Factory, $psr17Factory, $psr17Factory, $psr17Factory);
 
         return $psrHttpFactory->createRequest($request);
@@ -134,7 +134,7 @@ class APISchemaValidator
 
     private function createPsrResponse(Response $response): ResponseInterface
     {
-        $psr17Factory = new Psr17Factory();
+        $psr17Factory = new Psr17Factory;
         $psrHttpFactory = new PsrHttpFactory($psr17Factory, $psr17Factory, $psr17Factory, $psr17Factory);
 
         return $psrHttpFactory->createResponse($response);

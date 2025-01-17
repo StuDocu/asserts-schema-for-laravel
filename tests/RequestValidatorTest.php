@@ -29,7 +29,7 @@ class RequestValidatorTest extends \Orchestra\Testbench\TestCase
     /**
      * @dataProvider validQueryParametersDataProvider
      */
-    public function testShouldPassWithQueryParameters(string $data): void
+    public function test_should_pass_with_query_parameters(string $data): void
     {
         Route::prefix('api/v2')->group(function () {
             Route::get('query-params', fn () => ['message' => 'ok', 'id' => 1]);
@@ -54,7 +54,7 @@ class RequestValidatorTest extends \Orchestra\Testbench\TestCase
      *
      * @param  array{params: string, exception: string}  $data
      */
-    public function testShouldNotPassWithIncorrectQueryParameters(array $data): void
+    public function test_should_not_pass_with_incorrect_query_parameters(array $data): void
     {
         Route::prefix('api/v2')->group(function () {
             Route::get('query-params', fn () => ['message' => 'ok', 'id' => 1]);

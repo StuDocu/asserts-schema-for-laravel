@@ -23,7 +23,7 @@ class ExceptionExpectationTest extends TestCase
     /**
      * @dataProvider exceptionExpectationDataProvider
      */
-    public function testItShouldNotFailIfExceptionIsExpected(
+    public function test_it_should_not_fail_if_exception_is_expected(
         array $exceptions,
         callable $prepare,
         array $call,
@@ -41,7 +41,7 @@ class ExceptionExpectationTest extends TestCase
     /**
      * @dataProvider exceptionExpectationDataProvider
      */
-    public function testItShouldFailIfExceptionIsNotExpected(
+    public function test_it_should_fail_if_exception_is_not_expected(
         array $exceptions,
         callable $prepare,
         array $call,

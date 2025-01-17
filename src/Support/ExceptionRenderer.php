@@ -19,8 +19,7 @@ class ExceptionRenderer
     public function __construct(
         public readonly string $exception,
         private readonly Closure $renderer,
-    ) {
-    }
+    ) {}
 
     /**
      * @param  T  $exception

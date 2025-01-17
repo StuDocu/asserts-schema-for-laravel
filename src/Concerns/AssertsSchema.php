@@ -23,7 +23,7 @@ trait AssertsSchema
         $this->yamlPath = $yamlFullPath;
         $this->apiPrefix = $apiPrefix;
 
-        $this->exceptionExpectation = new ExceptionExpectationManager();
+        $this->exceptionExpectation = new ExceptionExpectationManager;
     }
 
     /**

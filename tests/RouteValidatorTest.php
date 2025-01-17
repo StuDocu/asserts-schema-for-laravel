@@ -25,7 +25,7 @@ class RouteValidatorTest extends \Orchestra\Testbench\TestCase
         );
     }
 
-    public function testShouldFindRouteWithQueryParams(): void
+    public function test_should_find_route_with_query_params(): void
     {
         Route::prefix('api/v1')->group(function () {
             Route::get('/my-url/{id}', fn (int $id) => ['message' => 'ok', 'id' => $id]);
@@ -36,7 +36,7 @@ class RouteValidatorTest extends \Orchestra\Testbench\TestCase
         $response->assertOk();
     }
 
-    public function testShouldFindPostRoutesToo(): void
+    public function test_should_find_post_routes_too(): void
     {
         Route::prefix('api/v1')->group(function () {
             Route::post('/my-url/{id}', fn (int $id) => response(['message' => 'ok', 'extra' => true], 200));
@@ -47,7 +47,7 @@ class RouteValidatorTest extends \Orchestra\Testbench\TestCase
         $response->assertSuccessful();
     }
 
-    public function testShouldBreakWithUndefinedRoutesOnSchema(): void
+    public function test_should_break_with_undefined_routes_on_schema(): void
     {
         Route::prefix('api/v1')->group(function () {
             Route::get('/my-url/{id}', fn (int $id) => ['message' => 'ok', 'id' => $id]);
@@ -61,7 +61,7 @@ class RouteValidatorTest extends \Orchestra\Testbench\TestCase
         $response = $this->getJson('/api/v1/my-url-new/1');
     }
 
-    public function testShouldBreakWhenCallingAnUndefinedMethod(): void
+    public function test_should_break_when_calling_an_undefined_method(): void
     {
         Route::prefix('api/v1')->group(function () {
             Route::get('/my-url/{id}', fn (int $id) => ['message' => 'ok', 'id' => $id]);
@@ -78,7 +78,7 @@ class RouteValidatorTest extends \Orchestra\Testbench\TestCase
         $this->putJson('/api/v1/my-url/1');
     }
 
-    public function testShouldBreakWhenRouteParametersAreNotValid(): void
+    public function test_should_break_when_route_parameters_are_not_valid(): void
     {
         Route::prefix('api/v1')->group(function () {
             Route::get('/my-url/{id}', fn (int $id) => ['message' => 'ok', 'id' => 1]);
