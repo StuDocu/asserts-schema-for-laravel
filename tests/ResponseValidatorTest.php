@@ -4,6 +4,7 @@ namespace Studocu\AssertsSchemaForLaravel\Tests;
 
 use Generator;
 use Illuminate\Support\Facades\Route;
+use Studocu\AssertsSchemaForLaravel\APISchemaValidator;
 use Studocu\AssertsSchemaForLaravel\Concerns\AssertsSchema;
 use Studocu\AssertsSchemaForLaravel\Exceptions\OpenAPIMismatchException;
 
@@ -14,6 +15,10 @@ class ResponseValidatorTest extends \Orchestra\Testbench\TestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        // Empty cache
+        APISchemaValidator::$validatorBuilderCache = [];
+        APISchemaValidator::$yamlCache = [];
 
         $this->configureSchema(
             yamlFullPath: __DIR__.'/Stubs/response.yaml',
@@ -26,7 +31,7 @@ class ResponseValidatorTest extends \Orchestra\Testbench\TestCase
      *
      * @param  array<array-key, mixed>  $data
      */
-    public function testShouldPassWithCorrectResponseParameters(array $data): void
+    public function test_should_pass_with_correct_response_parameters(array $data): void
     {
         Route::prefix('api/v2')->group(function () use ($data) {
             Route::get('test', fn () => $data);
@@ -46,7 +51,7 @@ class ResponseValidatorTest extends \Orchestra\Testbench\TestCase
      *
      * @dataProvider invalidResponseDataProvider
      */
-    public function testShouldNotPassWithIncorrectResponseParameters(array $data): void
+    public function test_should_not_pass_with_incorrect_response_parameters(array $data): void
     {
         Route::prefix('api/v2')->group(function () use ($data) {
             Route::get('test', fn () => $data['response']);

@@ -19,7 +19,7 @@ class CookieValidatorTest extends TestCase
         );
     }
 
-    public function testItShouldPassWhenSendingTheRightCookie(): void
+    public function test_it_should_pass_when_sending_the_right_cookie(): void
     {
         Route::prefix('api/v1')->group(function () {
             Route::get('send-cookie', fn () => ['test' => 'foo']);
@@ -32,7 +32,7 @@ class CookieValidatorTest extends TestCase
             ->assertOk();
     }
 
-    public function testItShouldBreakWhenSendingTheWrongCookie(): void
+    public function test_it_should_break_when_sending_the_wrong_cookie(): void
     {
         Route::prefix('api/v1')->group(function () {
             Route::get('send-cookie', fn () => ['test' => 'foo']);
@@ -48,7 +48,7 @@ class CookieValidatorTest extends TestCase
             ->assertOk();
     }
 
-    public function testItShouldPassWhenReceivingTheRightCookie(): void
+    public function test_it_should_pass_when_receiving_the_right_cookie(): void
     {
         Route::prefix('api/v1')->group(function () {
             Route::get('set-cookie', function () {
@@ -63,7 +63,7 @@ class CookieValidatorTest extends TestCase
             ->assertOk();
     }
 
-    public function testItShouldBreakWhenReceivingTheWrongCookie(): void
+    public function test_it_should_break_when_receiving_the_wrong_cookie(): void
     {
         Route::prefix('api/v1')->group(function () {
             Route::get('set-cookie', fn () => ['test' => 'foo']);

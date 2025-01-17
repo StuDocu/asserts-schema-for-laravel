@@ -9,8 +9,7 @@ class ExceptionExpectationManager
      */
     public function __construct(
         private array $expectedExceptions = [],
-    ) {
-    }
+    ) {}
 
     public function expects(string $exceptionMessage): void
     {
