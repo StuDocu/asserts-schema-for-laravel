@@ -25,6 +25,20 @@ class APISchemaValidator
 
     private string $routeUri;
 
+    /**
+     * This is made public in case it needs to be emptied.
+     *
+     * @var array <string, \cebe\openapi\spec\OpenApi>
+     */
+    public static array $yamlCache = [];
+
+    /**
+     * This is made public in case it needs to be emptied.
+     *
+     * @var array <string, ValidatorBuilder>
+     */
+    public static array $validatorBuilderCache = [];
+
     public function __construct(
         private string $yamlFile,
         string $apiPrefix,
@@ -35,7 +49,7 @@ class APISchemaValidator
         $this->apiPrefix = ltrim($apiPrefix, characters: '/');
         $this->routeUri = Str::replaceFirst($this->apiPrefix, '', subject: $routeUri);
 
-        $this->validatorBuilder = (new ValidatorBuilder())->fromYamlFile($this->yamlFile);
+        $this->validatorBuilder = static::$validatorBuilderCache[$this->yamlFile] ??= (new ValidatorBuilder())->fromYamlFile($this->yamlFile);
     }
 
     /**
@@ -81,7 +95,7 @@ class APISchemaValidator
 
     public function validateComponent(string $componentName, mixed $data): void
     {
-        $spec = Reader::readFromYamlFile($this->yamlFile);
+        $spec = static::$yamlCache[$this->yamlFile] ??= Reader::readFromYamlFile($this->yamlFile);
 
         if ($spec->components?->schemas === null) {
             throw OpenAPIMismatchException::fromComponentName($componentName);

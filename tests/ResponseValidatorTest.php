@@ -4,6 +4,7 @@ namespace Studocu\AssertsSchemaForLaravel\Tests;
 
 use Generator;
 use Illuminate\Support\Facades\Route;
+use Studocu\AssertsSchemaForLaravel\APISchemaValidator;
 use Studocu\AssertsSchemaForLaravel\Concerns\AssertsSchema;
 use Studocu\AssertsSchemaForLaravel\Exceptions\OpenAPIMismatchException;
 
@@ -14,6 +15,10 @@ class ResponseValidatorTest extends \Orchestra\Testbench\TestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        // Empty cache
+        APISchemaValidator::$validatorBuilderCache = [];
+        APISchemaValidator::$yamlCache = [];
 
         $this->configureSchema(
             yamlFullPath: __DIR__.'/Stubs/response.yaml',
