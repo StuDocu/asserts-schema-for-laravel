@@ -29,6 +29,7 @@ class RequestValidatorTest extends \Orchestra\Testbench\TestCase
     /**
      * @dataProvider validQueryParametersDataProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('validQueryParametersDataProvider')]
     public function test_should_pass_with_query_parameters(string $data): void
     {
         Route::prefix('api/v2')->group(function () {
@@ -54,6 +55,7 @@ class RequestValidatorTest extends \Orchestra\Testbench\TestCase
      *
      * @param  array{params: string, exception: string}  $data
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('invalidQueryParametersDataProvider')]
     public function test_should_not_pass_with_incorrect_query_parameters(array $data): void
     {
         Route::prefix('api/v2')->group(function () {

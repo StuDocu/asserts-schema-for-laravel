@@ -31,6 +31,7 @@ class ResponseValidatorTest extends \Orchestra\Testbench\TestCase
      *
      * @param  array<array-key, mixed>  $data
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('validResponseDataProvider')]
     public function test_should_pass_with_correct_response_parameters(array $data): void
     {
         Route::prefix('api/v2')->group(function () use ($data) {
@@ -51,6 +52,7 @@ class ResponseValidatorTest extends \Orchestra\Testbench\TestCase
      *
      * @dataProvider invalidResponseDataProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('invalidResponseDataProvider')]
     public function test_should_not_pass_with_incorrect_response_parameters(array $data): void
     {
         Route::prefix('api/v2')->group(function () use ($data) {
