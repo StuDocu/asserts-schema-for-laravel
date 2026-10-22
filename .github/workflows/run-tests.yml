@@ -9,7 +9,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        php: [8.3, 8.2, 8.1]
+        php: [8.5, 8.4, 8.3, 8.2, 8.1]
         laravel: [13.*, 12.*, 11.*, 10.*, 9.*, 8.*]
         stability: [prefer-stable]
         include:
@@ -38,6 +38,20 @@ jobs:
             laravel: 8.*
           - php: 8.3
             laravel: 9.*
+          - php: 8.4
+            laravel: 8.*
+          - php: 8.4
+            laravel: 9.*
+          - php: 8.4
+            laravel: 10.*
+          - php: 8.5
+            laravel: 8.*
+          - php: 8.5
+            laravel: 9.*
+          - php: 8.5
+            laravel: 10.*
+          - php: 8.5
+            laravel: 11.*
 
     name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }}
 
@@ -59,12 +73,24 @@ jobs:
 
       - name: Install dependencies
         run: |
-          # Composer 2.10 blocks advisory-affected packages at resolve time.
-          # Laravel 8–11 have no unflagged framework release, so the matrix
-          # cannot install those cells unless advisory blocking is off.
-          # COMPOSER_NO_AUDIT only skips the post-install report.
-          composer config policy.advisories.block false
-          composer update --with="laravel/framework:${{ matrix.laravel }}" --with="orchestra/testbench:${{ matrix.testbench }}" --${{ matrix.stability }} --prefer-dist --no-interaction --no-security-blocking
+          # EOL Laravel lines have no patched release; ignored only in this package's CI test install, consumers unaffected.
+          case "${{ matrix.laravel }}" in
+            11.*|10.*)
+              composer config policy.advisories.ignore-id \
+                PKSA-d5tc-s1qs-h781 PKSA-m5cs-t1y6-qpcs PKSA-3r5d-mb8f-1qw9 PKSA-mdq4-51ck-6kdq
+              ;;
+            9.*)
+              composer config policy.advisories.ignore-id \
+                PKSA-d5tc-s1qs-h781 PKSA-m5cs-t1y6-qpcs PKSA-3r5d-mb8f-1qw9 PKSA-mdq4-51ck-6kdq \
+                PKSA-8qx3-n5y5-vvnd
+              ;;
+            8.*)
+              composer config policy.advisories.ignore-id \
+                PKSA-d5tc-s1qs-h781 PKSA-m5cs-t1y6-qpcs PKSA-3r5d-mb8f-1qw9 \
+                PKSA-8qx3-n5y5-vvnd PKSA-w9tt-7782-78jx
+              ;;
+          esac
+          composer update --with="laravel/framework:${{ matrix.laravel }}" --with="orchestra/testbench:${{ matrix.testbench }}" --${{ matrix.stability }} --prefer-dist --no-interaction
 
       - name: Execute tests
         run: vendor/bin/phpunit
