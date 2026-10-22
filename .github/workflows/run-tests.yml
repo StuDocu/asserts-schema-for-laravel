@@ -6,38 +6,62 @@ jobs:
   test:
     runs-on: ${{ matrix.os }}
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         os: [ubuntu-latest]
-        php: [8.3, 8.2, 8.1]
-        laravel: [12.*, 11.*, 10.*, 9.*, 8.*]
+        php: [8.5, 8.4, 8.3, 8.2, 8.1]
+        laravel: [13.*, 12.*, 11.*, 10.*, 9.*, 8.*]
         stability: [prefer-stable]
         include:
+          - laravel: 13.*
+            testbench: 11.*
           - laravel: 12.*
             testbench: 10.*
           - laravel: 11.*
             testbench: 9.*
+            advisory_ignore_ids: PKSA-d5tc-s1qs-h781 PKSA-m5cs-t1y6-qpcs PKSA-3r5d-mb8f-1qw9 PKSA-mdq4-51ck-6kdq
           - laravel: 10.*
             testbench: 8.*
+            advisory_ignore_ids: PKSA-d5tc-s1qs-h781 PKSA-m5cs-t1y6-qpcs PKSA-3r5d-mb8f-1qw9 PKSA-mdq4-51ck-6kdq
           - laravel: 9.*
             testbench: ^7.0
+            advisory_ignore_ids: PKSA-d5tc-s1qs-h781 PKSA-m5cs-t1y6-qpcs PKSA-3r5d-mb8f-1qw9 PKSA-mdq4-51ck-6kdq PKSA-8qx3-n5y5-vvnd
           - laravel: 8.*
             testbench: ^6.6
+            advisory_ignore_ids: PKSA-d5tc-s1qs-h781 PKSA-m5cs-t1y6-qpcs PKSA-3r5d-mb8f-1qw9 PKSA-8qx3-n5y5-vvnd PKSA-w9tt-7782-78jx
         exclude:
           - php: 8.1
             laravel: 11.*
           - php: 8.1
             laravel: 12.*
+          - php: 8.1
+            laravel: 13.*
+          - php: 8.2
+            laravel: 13.*
           - php: 8.3
             laravel: 8.*
           - php: 8.3
             laravel: 9.*
+          - php: 8.4
+            laravel: 8.*
+          - php: 8.4
+            laravel: 9.*
+          - php: 8.4
+            laravel: 10.*
+          - php: 8.5
+            laravel: 8.*
+          - php: 8.5
+            laravel: 9.*
+          - php: 8.5
+            laravel: 10.*
+          - php: 8.5
+            laravel: 11.*
 
     name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }}
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v7
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -50,6 +74,12 @@ jobs:
         run: |
           echo "::add-matcher::${{ runner.tool_cache }}/php.json"
           echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+
+      - name: Ignore EOL Laravel advisories
+        if: ${{ matrix.advisory_ignore_ids }}
+        run: |
+          # Laravel 8-11 are EOL and have no patched release; these ignore lists need updating when new advisories land.
+          composer config policy.advisories.ignore-id ${{ matrix.advisory_ignore_ids }}
 
       - name: Install dependencies
         run: |

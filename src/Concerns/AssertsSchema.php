@@ -2,13 +2,16 @@
 
 namespace Studocu\AssertsSchemaForLaravel\Concerns;
 
+use Illuminate\Foundation\Testing\Concerns\MakesHttpRequests;
 use Illuminate\Support\Arr;
 use Illuminate\Testing\TestResponse;
 use Studocu\AssertsSchemaForLaravel\APISchemaValidator;
 use Studocu\AssertsSchemaForLaravel\Support\ExceptionExpectationManager;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * @mixin \Illuminate\Foundation\Testing\Concerns\MakesHttpRequests
+ * @mixin MakesHttpRequests
  */
 trait AssertsSchema
 {
@@ -102,8 +105,8 @@ trait AssertsSchema
     }
 
     /**
-     * @throws \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     * @throws MethodNotAllowedHttpException
+     * @throws NotFoundHttpException
      */
     private function getRouteUri(string $uri, string $method): string
     {

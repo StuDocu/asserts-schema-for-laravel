@@ -4,11 +4,13 @@ namespace Studocu\AssertsSchemaForLaravel\Tests;
 
 use Generator;
 use Illuminate\Support\Facades\Route;
+use Orchestra\Testbench\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Studocu\AssertsSchemaForLaravel\APISchemaValidator;
 use Studocu\AssertsSchemaForLaravel\Concerns\AssertsSchema;
 use Studocu\AssertsSchemaForLaravel\Exceptions\OpenAPIMismatchException;
 
-class ResponseValidatorTest extends \Orchestra\Testbench\TestCase
+class ResponseValidatorTest extends TestCase
 {
     use AssertsSchema;
 
@@ -31,7 +33,7 @@ class ResponseValidatorTest extends \Orchestra\Testbench\TestCase
      *
      * @param  array<array-key, mixed>  $data
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('validResponseDataProvider')]
+    #[DataProvider('validResponseDataProvider')]
     public function test_should_pass_with_correct_response_parameters(array $data): void
     {
         Route::prefix('api/v2')->group(function () use ($data) {
@@ -52,7 +54,7 @@ class ResponseValidatorTest extends \Orchestra\Testbench\TestCase
      *
      * @dataProvider invalidResponseDataProvider
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('invalidResponseDataProvider')]
+    #[DataProvider('invalidResponseDataProvider')]
     public function test_should_not_pass_with_incorrect_response_parameters(array $data): void
     {
         Route::prefix('api/v2')->group(function () use ($data) {

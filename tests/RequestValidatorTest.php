@@ -4,11 +4,13 @@ namespace Studocu\AssertsSchemaForLaravel\Tests;
 
 use Generator;
 use Illuminate\Support\Facades\Route;
+use Orchestra\Testbench\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Studocu\AssertsSchemaForLaravel\APISchemaValidator;
 use Studocu\AssertsSchemaForLaravel\Concerns\AssertsSchema;
 use Studocu\AssertsSchemaForLaravel\Exceptions\OpenAPIMismatchException;
 
-class RequestValidatorTest extends \Orchestra\Testbench\TestCase
+class RequestValidatorTest extends TestCase
 {
     use AssertsSchema;
 
@@ -29,7 +31,7 @@ class RequestValidatorTest extends \Orchestra\Testbench\TestCase
     /**
      * @dataProvider validQueryParametersDataProvider
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('validQueryParametersDataProvider')]
+    #[DataProvider('validQueryParametersDataProvider')]
     public function test_should_pass_with_query_parameters(string $data): void
     {
         Route::prefix('api/v2')->group(function () {
@@ -55,7 +57,7 @@ class RequestValidatorTest extends \Orchestra\Testbench\TestCase
      *
      * @param  array{params: string, exception: string}  $data
      */
-    #[\PHPUnit\Framework\Attributes\DataProvider('invalidQueryParametersDataProvider')]
+    #[DataProvider('invalidQueryParametersDataProvider')]
     public function test_should_not_pass_with_incorrect_query_parameters(array $data): void
     {
         Route::prefix('api/v2')->group(function () {
