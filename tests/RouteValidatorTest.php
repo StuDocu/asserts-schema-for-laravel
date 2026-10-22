@@ -3,11 +3,12 @@
 namespace Studocu\AssertsSchemaForLaravel\Tests;
 
 use Illuminate\Support\Facades\Route;
+use Orchestra\Testbench\TestCase;
 use Studocu\AssertsSchemaForLaravel\APISchemaValidator;
 use Studocu\AssertsSchemaForLaravel\Concerns\AssertsSchema;
 use Studocu\AssertsSchemaForLaravel\Exceptions\OpenAPIMismatchException;
 
-class RouteValidatorTest extends \Orchestra\Testbench\TestCase
+class RouteValidatorTest extends TestCase
 {
     use AssertsSchema;
 

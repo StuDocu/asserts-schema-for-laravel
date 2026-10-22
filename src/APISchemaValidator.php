@@ -3,6 +3,7 @@
 namespace Studocu\AssertsSchemaForLaravel;
 
 use cebe\openapi\Reader;
+use cebe\openapi\spec\OpenApi;
 use cebe\openapi\spec\Schema;
 use Exception;
 use Illuminate\Support\Str;
@@ -28,7 +29,7 @@ class APISchemaValidator
     /**
      * This is made public in case it needs to be emptied.
      *
-     * @var array <string, \cebe\openapi\spec\OpenApi>
+     * @var array <string, OpenApi>
      */
     public static array $yamlCache = [];
 
