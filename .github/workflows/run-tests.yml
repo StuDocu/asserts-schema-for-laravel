@@ -6,7 +6,7 @@ jobs:
   test:
     runs-on: ${{ matrix.os }}
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         os: [ubuntu-latest]
         php: [8.3, 8.2, 8.1]
@@ -59,7 +59,12 @@ jobs:
 
       - name: Install dependencies
         run: |
-          composer update --with="laravel/framework:${{ matrix.laravel }}" --with="orchestra/testbench:${{ matrix.testbench }}" --${{ matrix.stability }} --prefer-dist --no-interaction
+          # Composer 2.10 blocks advisory-affected packages at resolve time.
+          # Laravel 8–11 have no unflagged framework release, so the matrix
+          # cannot install those cells unless advisory blocking is off.
+          # COMPOSER_NO_AUDIT only skips the post-install report.
+          composer config policy.advisories.block false
+          composer update --with="laravel/framework:${{ matrix.laravel }}" --with="orchestra/testbench:${{ matrix.testbench }}" --${{ matrix.stability }} --prefer-dist --no-interaction --no-security-blocking
 
       - name: Execute tests
         run: vendor/bin/phpunit
