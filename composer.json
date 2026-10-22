@@ -16,9 +16,9 @@
     "require": {
         "php": "^8.1",
         "league/openapi-psr7-validator": "^0.22.0",
-        "symfony/psr-http-message-bridge": "^2.0|^v6.0|^v7.0|^v8.0",
-        "illuminate/testing": "^8.0|^9.0|^10.0|^11|^12|^13",
-        "illuminate/support": "^8.0|^9.0|^10.0|^11|^12|^13",
+        "symfony/psr-http-message-bridge": "^2.0|^6.0|^7.0|^8.0",
+        "illuminate/testing": "^8.0|^9.0|^10.0|^11.0|^12.0|^13.0",
+        "illuminate/support": "^8.0|^9.0|^10.0|^11.0|^12.0|^13.0",
         "nyholm/psr7": "^1.0"
     },
     "require-dev": {
