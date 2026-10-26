@@ -21,9 +21,6 @@ class ExceptionExpectationTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider exceptionExpectationDataProvider
-     */
     #[DataProvider('exceptionExpectationDataProvider')]
     public function test_it_should_not_fail_if_exception_is_expected(
         array $exceptions,
@@ -40,9 +37,6 @@ class ExceptionExpectationTest extends TestCase
         $response->assertStatus($status);
     }
 
-    /**
-     * @dataProvider exceptionExpectationDataProvider
-     */
     #[DataProvider('exceptionExpectationDataProvider')]
     public function test_it_should_fail_if_exception_is_not_expected(
         array $exceptions,

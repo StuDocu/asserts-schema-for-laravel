@@ -29,8 +29,6 @@ class ResponseValidatorTest extends TestCase
     }
 
     /**
-     * @dataProvider validResponseDataProvider
-     *
      * @param  array<array-key, mixed>  $data
      */
     #[DataProvider('validResponseDataProvider')]
@@ -51,8 +49,6 @@ class ResponseValidatorTest extends TestCase
 
     /**
      * @param  array{response: array<array-key, mixed>, exception: string}  $data
-     *
-     * @dataProvider invalidResponseDataProvider
      */
     #[DataProvider('invalidResponseDataProvider')]
     public function test_should_not_pass_with_incorrect_response_parameters(array $data): void

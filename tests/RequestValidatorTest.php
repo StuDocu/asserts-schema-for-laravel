@@ -28,9 +28,6 @@ class RequestValidatorTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider validQueryParametersDataProvider
-     */
     #[DataProvider('validQueryParametersDataProvider')]
     public function test_should_pass_with_query_parameters(string $data): void
     {
@@ -53,8 +50,6 @@ class RequestValidatorTest extends TestCase
     }
 
     /**
-     * @dataProvider invalidQueryParametersDataProvider
-     *
      * @param  array{params: string, exception: string}  $data
      */
     #[DataProvider('invalidQueryParametersDataProvider')]
