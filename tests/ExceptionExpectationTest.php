@@ -6,6 +6,7 @@ use Generator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Studocu\AssertsSchemaForLaravel\Exceptions\OpenAPIMismatchException;
 
 class ExceptionExpectationTest extends TestCase
@@ -20,10 +21,7 @@ class ExceptionExpectationTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider exceptionExpectationDataProvider
-     */
-    #[\PHPUnit\Framework\Attributes\DataProvider('exceptionExpectationDataProvider')]
+    #[DataProvider('exceptionExpectationDataProvider')]
     public function test_it_should_not_fail_if_exception_is_expected(
         array $exceptions,
         callable $prepare,
@@ -39,10 +37,7 @@ class ExceptionExpectationTest extends TestCase
         $response->assertStatus($status);
     }
 
-    /**
-     * @dataProvider exceptionExpectationDataProvider
-     */
-    #[\PHPUnit\Framework\Attributes\DataProvider('exceptionExpectationDataProvider')]
+    #[DataProvider('exceptionExpectationDataProvider')]
     public function test_it_should_fail_if_exception_is_not_expected(
         array $exceptions,
         callable $prepare,

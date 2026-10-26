@@ -3,6 +3,8 @@
 This is yet another package to assert that your test requests and responses matches an OpenAPI schema.
 It works by comparing the request/response against a schema file, and it will fail if the request/response does not match the schema.
 
+Requires PHP 8.2+ and Laravel 12 or 13.
+
 ## Installation
 
 ```bash
